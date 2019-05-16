@@ -1,0 +1,22 @@
+
+
+button {
+	cursor: pointer;
+}
+.login-width {
+	width: 600px !important;
+	max-width: none !important;
+}
+
+.modal-container-flex {
+    display: flex !important;
+    justify-content: center;
+    align-items: center;
+      background-image: url('src/img/senati-wp.jpg');	
+    background-repeat: no-repeat;
+    background-size: 100% 100%;
+    
+}
+.senati_logo {
+	background-image: url('img/senati_logo.png');	
+}
