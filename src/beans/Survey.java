@@ -14,6 +14,16 @@ public class Survey {
 		// TODO Auto-generated constructor stub
 	}
 	
+	public Survey(String name, String description, String timeLimit, String startDate, String endDate, String createdBy) {
+		super();
+		this.name = name;
+		this.description = description;
+		this.timeLimit = timeLimit;
+		this.startDate = startDate;
+		this.endDate = endDate;
+		this.createdBy = createdBy;
+	}
+	
 		
 	public Survey(int id, String name, String description, String timeLimit, String startDate, String endDate, String createdBy) {
 		super();

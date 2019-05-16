@@ -1,9 +1,11 @@
 package Dao;
 
+import java.sql.CallableStatement;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Types;
 import java.util.ArrayList;
 import java.util.List;
 import bd.PostGreSQLConnection;
@@ -15,6 +17,7 @@ public class DSurvey implements IDao<Survey> {
     private static List<Survey> surveyArray=null;
     private static Connection con;
     private PreparedStatement ps;
+    private CallableStatement cs;
     private ResultSet rs;
     
     public List<Survey> getSurveys(boolean getOnlyActiveSurveys) {
@@ -52,16 +55,20 @@ public class DSurvey implements IDao<Survey> {
 	
 	@Override
 	public String add(Survey obj) throws SQLException, Exception {
+			
     	try {
             con=PostGreSQLConnection.getConexion();
-            ps=con.prepareStatement("select * from fn_addsurvey(?,?,?,?,?,?)");
-            ps.setString(1, obj.getName());
-            ps.setString(2, obj.getDescription());
-            ps.setString(3, obj.getTimeLimit());
-            ps.setString(4, obj.getStartDate());
-            ps.setString(5, obj.getEndDate());
-            ps.setString(6, obj.getCreatedBy());
-            rs=ps.executeQuery();
+            cs=con.prepareCall("{ ? = call fn_addsurvey(?,?,?,?,?,?) }");
+            cs.registerOutParameter(1, Types.INTEGER);
+            cs.setString(1, obj.getName());
+            cs.setString(2, obj.getDescription());
+            cs.setString(3, obj.getTimeLimit());
+            cs.setString(4, obj.getStartDate());
+            cs.setString(5, obj.getEndDate());
+            cs.setString(6, obj.getCreatedBy());
+            cs.execute();
+            int result = cs.getInt(1);
+            System.out.println("result: "+result);
 
 		} catch (SQLException e) {
 			System.out.println("error de sql add survey: "+e.getMessage());

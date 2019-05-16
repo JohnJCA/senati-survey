@@ -24,7 +24,7 @@
 	<div style="margin-top:80px"  class="container-fluid">
 		<div>
 			<h4 class="text-primary">Datos de encuesta</h3><br>
-			<form id="surveyForm" class="row">
+			<form id="surveyForm" class="row"  method="post" action="SSurvey">
 				<div style="margin-bottom:20px" class="col-6">
 				  <div class="form-group">
 				    <label for="exampleFormControlInput1">Nombre</label>
@@ -46,7 +46,7 @@
 				  </div>
 		  	  	  <div class="form-group">
 				    <label for="exampleFormControlInput1">Tiempo máximo</label>
-				    <input type="number" class="form-control" name="questions" placeholder="Ingrese tiempo máximo (minutos)">
+				    <input type="number" class="form-control" name="maxTime" placeholder="Ingrese tiempo máximo (minutos)">
 				  </div>
 				</div>
 				

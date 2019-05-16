@@ -27,8 +27,6 @@ public class DUser {
             }
             
             ps=con.prepareStatement("select * from fn_getcredentials(?,?)");
-            System.out.println("username: "+username);
-            System.out.println("pasword: "+pasword);
             ps.setString(1, username );
             ps.setString(2, pasword );
             rs=ps.executeQuery();

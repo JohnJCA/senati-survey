@@ -75,10 +75,10 @@
 	}
 	
 	
-	function addCategory() {
+	function addSurvey() {
 		 let hiddenInput = document.getElementById('hiddenInput').value;
 
-		  $.post("SSSurvey", {
+		  $.post("SSurvey", {
 			questions: JSON.stringify(hiddenInput),
 		  }, function(data, status) {
 			  console.log("agregado");
