@@ -58,7 +58,7 @@ public class DSurvey implements IDao<Survey> {
 			
     	try {
             con=PostGreSQLConnection.getConexion();
-            cs=con.prepareCall("{ ? = call fn_addsurvey(?,?,?,?,?,?) }");
+            cs=con.prepareCall("{ ? = call fn_addsurvey(?, ?, ?, ?, ?, ?) }");
             cs.registerOutParameter(1, Types.INTEGER);
             cs.setString(1, obj.getName());
             cs.setString(2, obj.getDescription());
