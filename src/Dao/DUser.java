@@ -22,16 +22,13 @@ public class DUser {
     	try {
         	userArray = new ArrayList<User>();
             con=PostGreSQLConnection.getConexion();
-            if (con != null) {
-            	System.out.println("CONECTADO!!");
-            }
             
             ps=con.prepareStatement("select * from fn_getcredentials(?,?)");
             ps.setString(1, username );
             ps.setString(2, pasword );
             rs=ps.executeQuery();
             while(rs.next()){
-            	System.out.println("name: "+rs.getString(2));
+
             	userArray.add(new User(
                         rs.getInt(1),
                         rs.getString(2),

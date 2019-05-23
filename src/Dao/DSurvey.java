@@ -36,10 +36,10 @@ public class DSurvey implements IDao<Survey> {
                         rs.getInt(1),
                         rs.getString(2),
                         rs.getString(3),
-                        rs.getString(4),
-                        rs.getString(5),
-                        rs.getString(6),
-                        rs.getString(7))
+                        rs.getInt(4),
+                        rs.getTimestamp(5),
+                        rs.getTimestamp(6),
+                        rs.getInt(7))
                 );
       
             }
@@ -58,18 +58,18 @@ public class DSurvey implements IDao<Survey> {
 			
     	try {
             con=PostGreSQLConnection.getConexion();
-            cs=con.prepareCall("{ ? = call fn_addsurvey(?, ?, ?, ?, ?, ?) }");
+            CallableStatement cs = con.prepareCall("{? = call fn_addsurvey( ?,?,?,?,?,? ) }");
             cs.registerOutParameter(1, Types.INTEGER);
-            cs.setString(1, obj.getName());
-            cs.setString(2, obj.getDescription());
-            cs.setString(3, obj.getTimeLimit());
-            cs.setString(4, obj.getStartDate());
-            cs.setString(5, obj.getEndDate());
-            cs.setString(6, obj.getCreatedBy());
+            cs.setString(2, obj.getName());
+            cs.setString(3, obj.getDescription());
+            cs.setInt(4, obj.getTimeLimit());
+            cs.setTimestamp(5, obj.getStartDate());
+            cs.setTimestamp(6, obj.getEndDate());
+            cs.setInt(7, obj.getCreatedBy());
             cs.execute();
-            int result = cs.getInt(1);
-            System.out.println("result: "+result);
-
+            String newId = Integer.toString(cs.getInt(1));
+            cs.close();
+            return newId;
 		} catch (SQLException e) {
 			System.out.println("error de sql add survey: "+e.getMessage());
 		}
@@ -99,5 +99,13 @@ public class DSurvey implements IDao<Survey> {
 		// TODO Auto-generated method stub
 		return null;
 	}
+	
+	private static java.sql.Timestamp getCurrentTimeStamp() {
+
+		java.util.Date today = new java.util.Date();
+		return new java.sql.Timestamp(today.getTime());
+
+	}
+
 
 }

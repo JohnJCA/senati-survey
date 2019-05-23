@@ -1,20 +1,22 @@
 package beans;
 
+import java.sql.Timestamp;
+
 public class Survey {
 	
 	private int id;
 	private String name;
 	private String description;
-	private String timeLimit;
-	private String startDate;
-	private String endDate;
-	private String createdBy;
+	private int timeLimit;
+	private Timestamp startDate;
+	private Timestamp endDate;
+	private int createdBy;
 	
 	public Survey() {
 		// TODO Auto-generated constructor stub
 	}
 	
-	public Survey(String name, String description, String timeLimit, String startDate, String endDate, String createdBy) {
+	public Survey(String name, String description, int timeLimit, Timestamp startDate,Timestamp endDate, int createdBy) {
 		super();
 		this.name = name;
 		this.description = description;
@@ -25,7 +27,7 @@ public class Survey {
 	}
 	
 		
-	public Survey(int id, String name, String description, String timeLimit, String startDate, String endDate, String createdBy) {
+	public Survey(int id, String name, String description, int timeLimit, Timestamp startDate, Timestamp endDate, int createdBy) {
 		super();
 		this.id = id;
 		this.name = name;
@@ -60,31 +62,31 @@ public class Survey {
 		this.description = description;
 	}
 	
-	public String getTimeLimit() {
+	public int getTimeLimit() {
 		return timeLimit;
 	}
-	public void setTimeLimit(String timeLimit) {
+	public void setTimeLimit(int timeLimit) {
 		this.timeLimit = timeLimit;
 	}
 	
-	public String getStartDate() {
+	public Timestamp getStartDate() {
 		return startDate;
 	}
-	public void setStartDate(String startDate) {
+	public void setStartDate(Timestamp startDate) {
 		this.startDate = startDate;
 	}
 	
-	public String getEndDate() {
+	public Timestamp getEndDate() {
 		return endDate;
 	}
-	public void setEndDate(String endDate) {
+	public void setEndDate(Timestamp endDate) {
 		this.endDate = endDate;
 	}
 	
-	public String getCreatedBy() {
+	public int getCreatedBy() {
 		return createdBy;
 	}
-	public void setCreatedBy(String createdBy) {
+	public void setCreatedBy(int createdBy) {
 		this.createdBy = createdBy;
 	}
 	

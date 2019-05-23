@@ -33,8 +33,7 @@ public class SUser extends HttpServlet {
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		String username = request.getParameter("username");
-		String password = request.getParameter("password");
+		request.getRequestDispatcher("menu.jsp").forward(request, response);
 	}
 
 	/**

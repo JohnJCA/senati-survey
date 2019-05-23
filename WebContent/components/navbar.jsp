@@ -17,7 +17,12 @@
       </li>
     </ul>
      <ul style="cursor:pointer" class="nav navbar-nav navbar-right">
-      <img title="Cerrar sesión" width="25" height="25" src="src/img/logout.png"></img>
+     <form action="Logout" method="get">
+     	<input type="submit" class="logoutButton" value="Cerrar sesión">
+     	</input>
+     	
+     </form>
+      
     </ul>
 
   </div>

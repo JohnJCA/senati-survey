@@ -1,3 +1,4 @@
+<%@page import="beans.User"%>
 <%@page import="beans.Category"%>
 <%@page import="Dao.DCategory"%>
 <%@ page import ="java.util.ArrayList"%>
@@ -13,76 +14,64 @@
 <link rel="icon" href="http://www.senati.edu.pe/sites/all/themes/senati_theme/favicon/favicon.ico">
 <title>Agregar encuesta</title>
 <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+<link rel="stylesheet" type="text/css" href="main.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.22.2/moment.js"></script>
+
 </head>
-<script>
-
-
-
-</script>
 <body>
+
+
 	<jsp:include page="components/navbar.jsp"/>
+	
 	<div style="margin-top:80px"  class="container-fluid">
+	<input id="createdBy" type="hidden" value="${sessionScope.user.getId()}">
 		<div>
-			<h4 class="text-primary">Datos de encuesta</h3><br>
-			<form id="surveyForm" class="row"  method="post" action="SSurvey">
+			<h4 class="text-primary">Datos de encuesta</h4><br>
+			<form id="surveyForm" class="row">
 				<div style="margin-bottom:20px" class="col-6">
 				  <div class="form-group">
 				    <label for="exampleFormControlInput1">Nombre</label>
-				    <input type="text" class="form-control" name="name" placeholder="Ingrese nombre">
+				    <input type="text" class="form-control" id="surveyName" onkeyup="validate()" name="name" placeholder="Ingrese nombre" required autocomplete="off">
 				  </div>
 				  <div class="form-group">
 				    <label for="exampleFormControlTextarea1">Descripción</label>
-				    <textarea style="resize: none;height: 126px" maxlength="200" class="form-control" name="description"></textarea>
+				    <textarea style="resize: none;height: 126px" id="surveyDescription" onkeyup="validate()" maxlength="200" class="form-control" name="description" required autocomplete="off"></textarea>
 				  </div>
 				</div>
 				<div class="col-6">
 				  <div class="form-group">
 				    <label for="exampleFormControlInput1">Fecha de Inicio</label>
-				    <input type="datetime-local" class="form-control" name="startDate" placeholder="Ingrese fecha">
+				    <input type="datetime-local" class="form-control" id="startDate" onkeyup="validate()" name="startDate" placeholder="Ingrese fecha" required autocomplete="off">
 				  </div>
 		  		  <div class="form-group">
 				    <label for="exampleFormControlInput1">Fecha Final</label>
-				    <input type="datetime-local" class="form-control" name="endDate" id="exampleFormControlInput1" placeholder="Ingrese fecha">
+				    <input type="datetime-local" class="form-control" id="endDate" onkeyup="validate()" name="endDate" id="exampleFormControlInput1" placeholder="Ingrese fecha" required autocomplete="off">
 				  </div>
 		  	  	  <div class="form-group">
 				    <label for="exampleFormControlInput1">Tiempo máximo</label>
-				    <input type="number" class="form-control" name="maxTime" placeholder="Ingrese tiempo máximo (minutos)">
+				    <input type="number" class="form-control" name="maxTime" id="maxTime" onkeyup="validate()" placeholder="Ingrese tiempo máximo (minutos)" required autocomplete="off">
 				  </div>
 				</div>
 				
 				<h4 class="text-primary col-12">Sección de Preguntas</h4>
 				
-				<div style="margin: 0px 15px; width:100%; display:flex; flex-flow: row wrap" class="border">
-				
-					<div style="width:50%" class="border-right border-bottom p-4">
-					  	<div class="form-group">
-					        <label for="exampleFormControlSelect1">Seleccionar Categoría</label>
-						    <select onchange="categoryClicked()" class="form-control" id="categorySelect" typeahead-focus-first="false">
-						    	<option disabled selected value> -- SELECCIONE -- </option>
-						    </select>
-						</div>
-						<button type=d"button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#exampleModal">Agregar nueva categoría</button>
-					</div>
-				
-					<div id="description-container" style="width:50%" class="border-bottom p-4">
-						<div class="text-muted d-flex justify-content-center align-items-center" style="height:100%">Por favor seleccione una categoría</div> 
-					</div>
-					<div style="width:100%; margin:15px 24px">
-						<label for="exampleFormControlInput1">Preguntas</label>
-					  	<div class="input-group mb-3">
-				  			<input type="text" class="form-control" onkeyup="validateAddQuestionButton()" id="questionInput" placeholder="Ingrese Pregunta">
-						    <div class="input-group-append">
-						      <button class="btn btn-success" type="button" id="questionButton" onclick="addQuestion()" disabled><b>+</b></button>
-							</div>
-					  	</div>
-						<ul id="questionListContainer" class="list-group"></ul>
-						<input type="text" id="hiddenInput" name="questions" required>
-					</div>
-				</div>
+				<div id="containerOfSections" style="width:100%; margin: 0px 15px; ">
 
-   			    <div class="col-12 d-flex justify-content-end my-4">
-			    	<input class="btn btn-success" id="submitSurvey" type="submit" value="Registrar Encuesta">
+					<!-- aca va el loop -->
+				</div>
+   			    <div class="col-12 d-flex mb-4">
+			    	<a class="text text-primary" onclick="addSection()"> Agregar sección</a>
 			    </div>
+					
+   			    <div class="col-12 d-flex mb-4 flex-row-reverse">
+			    	<input class="btn btn-success btn-lg" id="submitSurvey" type="button" onclick="addSurvey()" value="Registrar Encuesta">
+			    </div>
+			</form>
+			<form method="post" action="SUser" class="hiddenform">
+			  
+				<input name="username" type="text" value="${sessionScope.user.getUsername()}">${sessionScope.user.getUsername()}</input>
+				<input name="password" type="text" value="${sessionScope.user.getPassword()}">${sessionScope.user.getPassword()}</input>
+				<input id="goToPrevius" type="submit" value="${sessionScope.user.getSecondName()}">${sessionScope.user.getFirstName()} </input>
 			</form>
 		</div>
 	</div>
@@ -96,77 +85,10 @@
 
 
 <script>
-/*
-	var questionList = [];
-	
-	function fillCategorySelect() {
-		removeOptions();
-		$.get(SCategory, function(data, status){
-	   		let select = document.getElementById("categorySelect");
-	   		
-	   		$.each(data,function(key, value) {
-	   			let option = document.createElement("option");
-	   			option.text = value.name;
-	   			option.value = value.description;
-	   			select.appendChild(option);
-			});
-		});
-	}
-	
-	fillCategorySelect();
-	
-	function removeOptions() {
-	    let select = document.getElementById("categorySelect");
-	    for(i = 0 ; i < select.options.length ; i++) {
-	    	if(i != 0) { select.remove(i);}
-	    	
-	    }
-	}
-	
-	function categoryClicked() {
-		
-		let select = document.getElementById("categorySelect");
-		let descriptionElement = document.getElementById("description-container");
-		let description = select.options[select.selectedIndex].value;
-		descriptionElement.innerHTML =  "<h6 class='text-primary'>Descripción:</h6><p id='description-text'>"+description+"</p>"
-	}
-	function addQuestion() {
-		let str = "";
-		let questionInput = document.getElementById("questionInput");
-		let question = questionInput.value;
-		questionList.push(question);
-		let questionListContainer = document.getElementById("questionListContainer");
-		questionList.map((question, index)=> {str += questionItem(question, index)});
-		questionListContainer.innerHTML = str;
-		questionInput.value = "";
-		questionInput.focus();
-		validateAddQuestionButton();
-		updateHiddenInput();	
-	}
-	
-	function removeQuestion(index) {
-		let questionItem = document.getElementById("q"+index);
-		questionText = questionItem.querySelector('span').innerText;
-		questionList = questionList.filter((question)=> {
-	
-			return question !== questionText
-		});
-		document.getElementById("q"+index).remove();
-		updateHiddenInput();
-	}
-	
-	function validateAddQuestionButton() {
-		let button = document.getElementById('questionButton');
-		button.disabled = (document.getElementById("questionInput").value==="") ? true: false;
-	}
-	
-	function updateHiddenInput() {
-		let hiddenInput= document.getElementById('hiddenInput');
-		console.log("questionList",questionList);
-		hiddenInput.value = JSON.stringify(questionList);
-	}
-	
-	function 
-*/
+function parseDate(id) {
+	value = getValueById(id);
+	return moment(value).format('YYYY-MM-DD HH:mm:ss');	
+}
+
 </script>
 </html>

@@ -11,15 +11,15 @@
       <div class="modal-body">
 		  <div class="form-group">
 		    <label for="exampleInputEmail1">Nombre</label>
-		    <input type="text" id="categoryName" class="form-control" name="username" placeholder="Ingrese nombre" required>
+		    <input type="text" id="categoryName" class="form-control" name="username" placeholder="Ingrese nombre" required autocomplete="off">
 		  </div>
 		  <div class="form-group">
 		    <label for="exampleFormControlTextarea1">Descripción</label>
-		    <textarea style="resize: none;height: 126px" maxlength="200" class="form-control" id="categoryDescription"></textarea>
+		    <textarea style="resize: none;height: 126px" maxlength="200" class="form-control" id="categoryDescription" autocomplete="off"></textarea>
 		  </div>
       </div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
         <button onclick="addCategory()" class="btn btn-primary" data-dismiss="modal">Guardar</button>
       </div>
     </div>
@@ -33,9 +33,10 @@ function addCategory() {
 		categoryName: categoryName,
 		categoryDescription: categoryDescription
 	  }, function(data, status) {
-		  fillCategorySelect();
+		  fillAllCategorySelect();
 	  });
 }
+
 
 
 </script>

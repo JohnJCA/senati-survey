@@ -20,3 +20,28 @@ button {
 .senati_logo {
 	background-image: url('img/senati_logo.png');	
 }
+.description-container {
+	padding: 1.5rem!important;	
+    border-bottom: 1px solid #dee2e6!important;
+}
+.secction {
+	margin-bottom: 30px;
+}
+
+.secction::last-child {
+	margin-bottom: 10px !important;
+}
+a {
+	cursor: pointer;
+}
+
+.hiddenform {
+	visibility: hidden;
+}
+
+.logoutButton {
+	background-image: url('src/img/logout.png');
+	background-color: transparent;
+	border: none;
+		
+}

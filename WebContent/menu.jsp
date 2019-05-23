@@ -12,6 +12,7 @@
     <title>Menu</title>
     <meta name="description" content="Source code generated using layoutit.com">
     <meta name="author" content="LayoutIt!">
+    <link rel="stylesheet" type="text/css" href="main.css">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
   </head>
   
@@ -31,8 +32,10 @@
 	<div style="margin-top:80px" class="container-fluid">
 	
 		<div class="form-inline">
-			<h3>Encuestas disponibles</h3>	
-			<a href="survey.jsp" style="margin-left:30px" type="button" class="btn btn-success">Agregar</a>
+			<h3>Encuestas disponibles</h3>
+			<% if( user.getUserType() == true) {  %>
+				<a href="survey.jsp" style="margin-left:30px" type="button" class="btn btn-success">Agregar</a>
+			<% } %>
 		</div>
 		<br>
 		<div class="row">
@@ -44,15 +47,16 @@
 						  <h4 class="card-title">${data.getName()}</h4>
 			     		  <h6 class="card-title text-primary">Tiempo límite: ${data.getTimeLimit()} minutos</h6>		      
 					      <p class="card-text">${data.getDescription()}</p>
-					      <form  method="post" action="SSurvey">
-					      	<% if( user.getUserType() == false) {  %>
+					      <form  method="get" action="SSurvey">
+
+					      	<% if( user.getUserType() == true) {  %>
 					      	<input type="hidden"  name="id" value="${data.getId()}"></input>
-					      	<input type="hidden"  name="type" value="${user.getUserType()}"></input>
-					      	<button type="submit" class="btn btn-primary" name="">Ver encuesta</button>
+					      	<input type="hidden"  name=isTutor value="${user.getUserType()}"></input>
+					      	<button type="submit" disabled="true" class="btn btn-primary" name="">Ver encuesta</button>
 	
 							<% } else { %>
 					      	<input type="hidden"  name="id" value="${data.getId()}"></input>
-					      	<input type="hidden"  name="type" value="${user.getUserType()}"></input>
+					      	<input type="hidden"  name="isTutor" value="${user.getUserType()}"></input>
 							<button type="submit" class="btn btn-primary" >Empezar encuesta</button>
 							<% } %>
 					      
