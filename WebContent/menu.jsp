@@ -1,7 +1,7 @@
 <%@page import="beans.User"%>
 <%@page import="Dao.DSurvey"%>
 <%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
-<%@ page language="java" contentType="text/html; charset=ISO-8859-1" pageEncoding="ISO-8859-1"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html lang="en">
   <head>
@@ -18,13 +18,12 @@
   
  <body>
 <%
-	
-	if (request.getAttribute("user") == null) {
-	    session.invalidate();
-	    response.sendRedirect("index.jsp");
-	    return;
-	}
-	User user = User.class.cast(request.getAttribute("user"));
+User user =(User)session.getAttribute("user"); 
+if (user.getFirstName() == null) {
+    session.invalidate();
+    response.sendRedirect("index.jsp");
+    return;
+}
 
 %>
  <jsp:include page="components/navbar.jsp"/> 
@@ -33,7 +32,7 @@
 	
 		<div class="form-inline">
 			<h3>Encuestas disponibles</h3>
-			<% if( user.getUserType() == true) {  %>
+			<% if( user.getUserType() == false) {  %>
 				<a href="survey.jsp" style="margin-left:30px" type="button" class="btn btn-success">Agregar</a>
 			<% } %>
 		</div>
@@ -44,19 +43,22 @@
 			      <div class="col-sm-6 mb-md-5">
 					  <div class="card">
 					    <div class="card-body">
-						  <h4 class="card-title">${data.getName()}</h4>
-			     		  <h6 class="card-title text-primary">Tiempo límite: ${data.getTimeLimit()} minutos</h6>		      
+						  <h4 class="card-title">${data.getName()}</h4>		      
 					      <p class="card-text">${data.getDescription()}</p>
 					      <form  method="get" action="SSurvey">
 
-					      	<% if( user.getUserType() == true) {  %>
+					      	<% if( user.getUserType() == false) {  %>
 					      	<input type="hidden"  name="id" value="${data.getId()}"></input>
 					      	<input type="hidden"  name=isTutor value="${user.getUserType()}"></input>
-					      	<button type="submit" disabled="true" class="btn btn-primary" name="">Ver encuesta</button>
+  	    					<input type="hidden"  name="surveyName" value="${data.getName()}"></input>
+  	    					<input type="hidden"  name="time" value="${data.getTimeLimit()}"></input> 
+					      	<button type="submit" class="btn btn-primary" name="">Ver encuesta</button>
 	
 							<% } else { %>
 					      	<input type="hidden"  name="id" value="${data.getId()}"></input>
 					      	<input type="hidden"  name="isTutor" value="${user.getUserType()}"></input>
+    						<input type="hidden"  name="surveyName" value="${data.getName()}"></input>
+  	    					<input type="hidden"  name="time" value="${data.getTimeLimit()}"></input> 
 							<button type="submit" class="btn btn-primary" >Empezar encuesta</button>
 							<% } %>
 					      

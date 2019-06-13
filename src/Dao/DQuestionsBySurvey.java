@@ -5,9 +5,11 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.List;
 
 import bd.PostGreSQLConnection;
 import beans.QuestionsBySurvey;
+import beans.Survey;
 import beans.User;
 
 public class DQuestionsBySurvey {
@@ -15,6 +17,8 @@ public class DQuestionsBySurvey {
     private static Connection con;
     private static PreparedStatement ps;
     private static ResultSet rs;
+    
+    private static List<QuestionsBySurvey> questionsBySurveyArray=null;
     
 	public static void addQuestionsBySurvey(QuestionsBySurvey obj) throws SQLException, Exception {
 		try {
@@ -29,24 +33,34 @@ public class DQuestionsBySurvey {
 			System.out.println("error de sql get credentials: "+e.getMessage());
 		}
 	}
-	public static void main(String[] args) {
-		System.out.println("rs,");
-        
-        try {
-        	ps=con.prepareStatement("select * from getSurveyById(42) as (aa int, bb int, cc varchar, dd int, ee varchar) ");
-			
-			rs=ps.executeQuery();
-            while(rs.next()){
+	
+	public List<QuestionsBySurvey> getSurvey(int id) {
 
-            	System.out.println("rs.getString(3),"+rs.getString(3));
-          
+        String SQL = "select * from getSurveyById(?) as (idSurvey int, idQuestion int, question varchar, idCategory int, category varchar) order by category ";
+        try  {
+        	questionsBySurveyArray = new ArrayList<>();
+        	con=PostGreSQLConnection.getConexion();
+            PreparedStatement pstmt = con.prepareStatement(SQL);
+            pstmt.setInt(1,id);
+            ResultSet rs = pstmt.executeQuery();
+ 
+            while (rs.next()) {
+            	
+	        	questionsBySurveyArray.add(new QuestionsBySurvey(
+	    			 rs.getInt(1),
+	    			 rs.getInt(2),
+	    			 rs.getString(3),
+	    			 rs.getInt(4),
+	    			 rs.getString(5))
+				);
             }
-		} catch (SQLException e) {
-			System.out.println("e"+e);
-			e.printStackTrace();
-		}
-        
-        
-        
+           
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+		
+        return questionsBySurveyArray;
+
 	}
+
 }

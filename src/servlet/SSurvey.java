@@ -2,6 +2,7 @@ package servlet;
 
 import java.io.IOException;
 import java.sql.Timestamp;
+import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.List;
 
@@ -10,6 +11,8 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+
+import com.google.gson.JsonArray;
 
 import Dao.DCategory;
 import Dao.DQuestion;
@@ -20,6 +23,7 @@ import beans.Question;
 import beans.QuestionsBySurvey;
 import beans.Section;
 import beans.Survey;
+import beans.SurveyResponse;
 import utility.Utility;
 
 /**
@@ -41,16 +45,78 @@ public class SSurvey extends HttpServlet {
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		request.setCharacterEncoding("UTF-8");
 		String id = Utility.getStringParameter("id", request);
-		//String isTutor = Utility.getStringParameter("isTutor", request);
+		String isTutor = Utility.getStringParameter("isTutor", request);
+		String surveyName = Utility.getStringParameter("surveyName", request);
+		String time = Utility.getStringParameter("time", request);
+		
+		DQuestionsBySurvey dQuestionsBySurvey = new DQuestionsBySurvey();
+		
+		// records de base de datos
+		List<QuestionsBySurvey> result = dQuestionsBySurvey.getSurvey(Integer.parseInt(id));
+		
+		int actualCategoryId = -1;
+		List<SurveyResponse> surveyResponses = new ArrayList<>();
+		
+		for (int i = 0; i < result.size(); i++) {
+			
+			if(result.get(i).getIdCategory() != actualCategoryId) {
+				actualCategoryId = result.get(i).getIdCategory();
+				String actualCategory = result.get(i).getCategory();
+				surveyResponses.add(new SurveyResponse(actualCategoryId,actualCategory));
+			}
+			
+		}
+
+		for (int i = 0; i < surveyResponses.size(); i++) {
+			
+			List<Question> questionList = new ArrayList<>();
+			int idCategory = surveyResponses.get(i).getIdCategory();
+			
+			for (int j = 0; j < result.size(); j++) {
+				
+				QuestionsBySurvey row = result.get(j);
+				Question question= new Question();
+
+				if(idCategory == row.getIdCategory()) {
+					
+					question.setId(row.getIdQuestion());
+					question.setName(row.getQuestion());
+					questionList.add(question);
+				}
+				
+			}
+			surveyResponses.get(i).setQuestions(questionList);
+
+		}
+		
+		request.setAttribute("surveyResponses", surveyResponses );
 		request.setAttribute("id", id );
-		request.getRequestDispatcher("newSurvey.jsp").forward(request, response);
+		request.setAttribute("isTutor", isTutor );
+		request.setAttribute("surveyName", surveyName );
+		request.setAttribute("time", time );
+		
+		
+		
+		//surveyGraphics.jsp
+		
+		if(Boolean.parseBoolean(isTutor) == false) {
+			request.getRequestDispatcher("surveyGraphics.jsp").forward(request, response);
+		} else {
+			request.getRequestDispatcher("newSurvey.jsp").forward(request, response);
+		}
+		
+		
+		
 	}
 
 	/**
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		
+		
 		
 		int createdBy = Integer.parseInt(request.getParameter("createdBy"));
 		String name = Utility.getStringParameter("surveyName", request);

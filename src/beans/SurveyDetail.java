@@ -21,6 +21,12 @@ public class SurveyDetail {
 		this.idQuestion = idQuestion;
 	}
 	
+	public SurveyDetail(int idSurveyRecord, int idQuestion, int idResponse) {
+		super();
+		this.idSurveyRecord = idSurveyRecord;
+		this.idQuestion = idQuestion;
+		this.idResponse = idResponse;
+	}
 	public int getIdResponse() {
 		return idResponse;
 	}

@@ -38,7 +38,9 @@ public class Question {
 	public void setIdCategory(int idCategory) {
 		this.idCategory = idCategory;
 	}
-	
+	public Question() {
+
+	}
 	
 	
 }

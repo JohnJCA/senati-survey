@@ -64,7 +64,7 @@
 			    </div>
 					
    			    <div class="col-12 d-flex mb-4 flex-row-reverse">
-			    	<input class="btn btn-success btn-lg" id="submitSurvey" type="button" onclick="addSurvey()" value="Registrar Encuesta">
+			    	<input class="btn btn-success btn-lg" id="submitSurvey" type="submit" onclick="addSurvey()" value="Registrar Encuesta">
 			    </div>
 			</form>
 			<form method="post" action="SUser" class="hiddenform">
