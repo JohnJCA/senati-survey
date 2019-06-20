@@ -1,5 +1,7 @@
 
 	let surveyBodyRequest = [];
+	
+	
 
 	function fillAllCategorySelect() {
 		removeAllOptions();
@@ -231,7 +233,7 @@
 	
 	function createSecction(position) {
 		
-		return "<div data-position="+position+" style='display:flex; flex-flow: row wrap' class='border secction'><div style='width:50%' class='border-right border-bottom p-4'><div class='form-group'><label for='exampleFormControlSelect1'>Seleccionar Categoria</label><select data-position="+position+" onchange='categoryClicked(this)' class='form-control' id='categorySelect' typeahead-focus-first='false'></select></div><button type='button' onclick='cleanModal()' class='btn btn-primary btn-sm' data-toggle='modal' data-target='#exampleModal'>Agregar nueva categoria</button></div><div class='description-container' data-position="+position+" style='width:50%' class='border-bottom p-4'><div class='text-muted d-flex justify-content-center align-items-center' style='height:100%'>Por favor seleccione una categoria</div> </div><div style='width:100%; margin:15px 24px'><label for='exampleFormControlInput1'>Preguntas</label><div class='input-group mb-3'><input data-position="+position+" type='text' class='form-control questionInput' onkeyup='validateAddQuestionButton(this)' placeholder='Ingrese Pregunta'><div class='input-group-append'><button data-position="+position+" class='btn btn-success questionButton' type='button' onclick='addQuestion(this)' disabled><b>+</b></button></div></div><ul data-position="+position+" class='list-group questionListContainer'></ul></div></div>"
+		return "<div data-position="+position+" style='display:flex; flex-flow: row wrap' class='border secction'><div style='width:50%' class='border-right border-bottom p-4'><div class='form-group'><label for='exampleFormControlSelect1'>Seleccionar Categoria</label><select data-position="+position+" onchange='categoryClicked(this)' class='form-control' id='categorySelect' typeahead-focus-first='false'></select></div></div><div class='description-container' data-position="+position+" style='width:50%' class='border-bottom p-4'><div class='text-muted d-flex justify-content-center align-items-center' style='height:100%'>Por favor seleccione una categoria</div> </div><div style='width:100%; margin:15px 24px'><label for='exampleFormControlInput1'>Preguntas</label><div class='input-group mb-3'><input data-position="+position+" type='text' class='form-control questionInput' onkeyup='validateAddQuestionButton(this)' placeholder='Ingrese Pregunta'><div class='input-group-append'><button data-position="+position+" class='btn btn-success questionButton' type='button' onclick='addQuestion(this)' disabled><b>+</b></button></div></div><ul data-position="+position+" class='list-group questionListContainer'></ul></div></div>"
 	}
 
 	

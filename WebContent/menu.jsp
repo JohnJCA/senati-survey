@@ -1,3 +1,6 @@
+<%@page import="beans.Survey"%>
+<%@page import="beans.SurveyResponse"%>
+<%@page import="java.util.List"%>
 <%@page import="beans.User"%>
 <%@page import="Dao.DSurvey"%>
 <%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
@@ -24,22 +27,27 @@ if (user.getFirstName() == null) {
     response.sendRedirect("index.jsp");
     return;
 }
-
+	DSurvey dc=new DSurvey();
+	List<Survey> listSurvey = dc.getSurveys(true);
+	System.out.println("listSurvey"+listSurvey.size());
 %>
  <jsp:include page="components/navbar.jsp"/> 
 
 	<div style="margin-top:80px" class="container-fluid">
-	
+	<% if( listSurvey.size() > 0) {  %>
 		<div class="form-inline">
+
 			<h3>Encuestas disponibles</h3>
+
 			<% if( user.getUserType() == false) {  %>
 				<a href="survey.jsp" style="margin-left:30px" type="button" class="btn btn-success">Agregar</a>
 			<% } %>
 		</div>
+		<% } %>
 		<br>
 		<div class="row">
-			 <% DSurvey dc=new DSurvey();%>
-			 <c:forEach var="data" items="<%=dc.getSurveys(true)%>">	        
+			 
+			 <c:forEach var="data" items="<%=listSurvey%>">	        
 			      <div class="col-sm-6 mb-md-5">
 					  <div class="card">
 					    <div class="card-body">
@@ -73,8 +81,28 @@ if (user.getFirstName() == null) {
 					  </div>
 				  </div>
 		     </c:forEach>
+	    	<div id="img-container" style="display:none; justify-content:center; width: 100%; margin-top:40px; flex-direction: column;align-items: center; ">
+    			<div style="width: 50%;box-shadow: 5px 5px 19px -8px rgba(0,0,0,0.75);">
+		    		<img alt="not_found" src="src/img/not_found.png" style="width: 100%;">
+	    			<a href="survey.jsp"  style="width: 100%;" type="button" style="width: 100%;" class="btn btn-lg btn-success">Agregar</a>
+    			</div>
+
+	    	</div>
+		     
 		</div>
 	</div>
+	<script>
+	let listSurvey="<%=listSurvey%>"; 
+	console.log("listSurvey",listSurvey);
+	let divImg = document.getElementById('img-container');
+	
+	if(listSurvey.length <= 2) {
+		divImg.style.display = "flex";
+	}
+	
+	
+	
+	</script>
 
 <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>

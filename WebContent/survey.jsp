@@ -19,9 +19,17 @@
 
 </head>
 <body>
+<script>
+function cleanModal() {
+    document.getElementById("categoryName").value = "";
+    document.getElementById("categoryDescription").value = "";
+}
+
+</script>
 
 
 	<jsp:include page="components/navbar.jsp"/>
+	<jsp:include page="components/category-modal.jsp"/>	
 	
 	<div style="margin-top:80px"  class="container-fluid">
 	<input id="createdBy" type="hidden" value="${sessionScope.user.getId()}">
@@ -47,9 +55,12 @@
 				    <label for="exampleFormControlInput1">Fecha Final</label>
 				    <input type="datetime-local" class="form-control" id="endDate" onkeyup="validate()" name="endDate" id="exampleFormControlInput1" placeholder="Ingrese fecha" required autocomplete="off">
 				  </div>
-		  	  	  <div class="form-group">
+				  <div class="form-group">
+				  	<button type='button' onclick='cleanModal()' class='btn btn-primary' data-toggle='modal' data-target='#exampleModal'>Agregar nueva categoria</button>
+				  </div>
+		  	  	  <div class="form-group" style="visibility: hidden">
 				    <label for="exampleFormControlInput1">Tiempo máximo</label>
-				    <input type="number" class="form-control" name="maxTime" id="maxTime" onkeyup="validate()" placeholder="Ingrese tiempo máximo (minutos)" required autocomplete="off">
+				    <input type="number" class="form-control" name="maxTime" id="maxTime" onkeyup="validate()" placeholder="Ingrese tiempo máximo (minutos)" value="10" required autocomplete="off">
 				  </div>
 				</div>
 				
@@ -64,7 +75,7 @@
 			    </div>
 					
    			    <div class="col-12 d-flex mb-4 flex-row-reverse">
-			    	<input class="btn btn-success btn-lg" id="submitSurvey" type="submit" onclick="addSurvey()" value="Registrar Encuesta">
+			    	<input class="btn btn-success btn-lg" id="submitSurvey" type="button" onclick="addSurvey()" value="Registrar Encuesta">
 			    </div>
 			</form>
 			<form method="post" action="SUser" class="hiddenform">
@@ -75,7 +86,7 @@
 			</form>
 		</div>
 	</div>
-	<jsp:include page="components/category-modal.jsp"/>	
+
 </body>
 <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>

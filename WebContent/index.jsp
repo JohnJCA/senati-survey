@@ -19,7 +19,7 @@
 	<div class="modal fade modal-container-flex" id="modal-container-125442" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
 		<div class="modal-dialog login-width" role="document">
 			<div class="modal-content">
-				<form method="post" action="SUser">
+				<form method="post" action="SUser" autocomplete="off" >
 				<div class="modal-header">
 					<img style="width:300px; margin:auto"src="src/img/senati_logo.png"></img> 
 				</div>
@@ -27,11 +27,11 @@
 					
 					  <div class="form-group">
 					    <label for="exampleInputEmail1">Usuario</label>
-					    <input type="text" class="form-control" name="username" placeholder="Ingrese usuario" required value="john123">
+					    <input type="text" class="form-control" name="username" placeholder="Ingrese usuario" required>
 					  </div>
 					  <div class="form-group">
 					    <label for="exampleInputPassword1">Contraseña</label>
-					    <input type="password" class="form-control" name="password" placeholder="Ingrese contraseña" required value="123">
+					    <input type="password" class="form-control" name="password" placeholder="Ingrese contraseña" required>
 					  </div>
 					
 				</div>

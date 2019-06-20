@@ -37,18 +37,21 @@ public class DData {
 	
 	
 	
-	public int getRecordsCount() throws SQLException, Exception {
+	public int getRecordsCount(int surveyId) throws SQLException, Exception {
 		
 		try {
-	        con=PostGreSQLConnection.getConexion();
-	        CallableStatement cs = con.prepareCall("{? = call fn_getrecordscount() }");
-	        cs.registerOutParameter(1, Types.INTEGER);
+			
+            con=PostGreSQLConnection.getConexion();
+            CallableStatement cs = con.prepareCall("{? = call fn_getrecordscount(? ) }");
+            cs.registerOutParameter(1, Types.INTEGER);
+            cs.setInt(2, surveyId);
+			
 	        cs.execute();
 	        return cs.getInt(1);
 		} catch (SQLException e) {
 			System.out.println("error de sql fn_getrecordscount: "+e.getMessage());
 		}
-		return (Integer) null;
+		return 0;
 		
 	}
 
@@ -75,7 +78,63 @@ public class DData {
     	return diagramArray;
 
     }
+    
+	public String getTAverage(int surveyId) throws SQLException, Exception {
+		String timeString;
+		try {
+			
+            con=PostGreSQLConnection.getConexion();
+            CallableStatement cs = con.prepareCall("{? = call getSurveyAvg(? ) }");
+            cs.registerOutParameter(1, Types.TIME);
+            cs.setInt(2, surveyId);
+	        cs.execute();
+	        timeString =  cs.getTime(1).toString() ; 
+	        return timeString;
+		} catch (SQLException e) {
+			System.out.println("error de sql fn_getrecordscount: "+e.getMessage());
+			timeString = "0";
+		}
+		return null;
+		
+	}
 	
+	public String getTFastesUser(int surveyId) throws SQLException, Exception {
+		String timeString;
+		try {
+	        con=PostGreSQLConnection.getConexion();
+	        CallableStatement cs = con.prepareCall("{? = call getFastestUser(?) }");
+	        cs.registerOutParameter(1, Types.TIME);
+	        cs.setInt(2, surveyId);
+	        cs.execute();
+	        timeString =  cs.getTime(1).toString() ; 
+	        return timeString;
+		} catch (SQLException e) {
+			System.out.println("error de sql fn_getrecordscount: "+e.getMessage());
+			timeString = "00:00:00";
+		}
+		return null;
+		
+	}
 	
+	public String getTLowestUser(int surveyId) throws SQLException, Exception {
+		String timeString;
+		try {
+	        con=PostGreSQLConnection.getConexion();
+	        CallableStatement cs = con.prepareCall("{? = call getslowestuser(?) }");
+	        cs.registerOutParameter(1, Types.TIME);
+	        cs.setInt(2, surveyId);
+	        cs.execute();
+	        timeString =  cs.getTime(1).toString() ; 
+	        return timeString;
+		} catch (SQLException e) {
+			System.out.println("error de sql fn_getrecordscount: "+e.getMessage());
+			timeString = "00:00:00";
+		}
+		return null;
+		
+	}
 	
+    
+    
+
 }

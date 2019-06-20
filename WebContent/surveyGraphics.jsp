@@ -20,23 +20,33 @@
 
 <% 
 	DData data =new DData();
-	int recordsCount = data.getRecordsCount();
+String id = (String) request.getAttribute("id");
+int idAsInt = Integer.parseInt(id);
+	int recordsCount = data.getRecordsCount(idAsInt);
 	int studentsCount = data.getStudentsCount();
+	System.out.println("studentsCount"+ Integer.toString(studentsCount));
 	int studentswithoutRecord = studentsCount - recordsCount;
-	String id = (String) request.getAttribute("id");
-	int idAsInt = Integer.parseInt(id);
 
+	String surveyName = (String) request.getAttribute("surveyName");
+	
+
+	List<Diagram>  listdiagrambar =  data.getDiagramBar(idAsInt);
+	
+	String average =  data.getTAverage(idAsInt);
+	String fastest =  data.getTFastesUser(idAsInt);
+	String lowest =  data.getTLowestUser(idAsInt);
+	
 %>
 
 
-<div class="container-fluid" style="margin-top:80px; display: flex; flex-flow: row wrap; justify-content: space-around;">
+<div  style="margin-top:80px; display: flex; flex-flow: row wrap; justify-content: center;">
 
 	<script>
 		var sum = [];
 		var labels = [];
 	</script>
 
-      <c:forEach var="row" items="<%=data.getDiagramBar( idAsInt)%>" >
+      <c:forEach var="row" items="<%=listdiagrambar%>" >
       	<script>
 			 labels.push("${row.getQuestionName()}");
 			 sum.push("${row.getSuma()}");
@@ -46,27 +56,22 @@
       
       
 
-	<h3 class="text-primary" style="text-align:center;width: 100%">Analítica</h3><br><br><br><br>
-	
-	<div class="col-5">
+	<h3 class="text-primary" style="text-align:center;width: 100%">${surveyName} - Analítica </h3><br><br><br><br>
+				
+		
+		<div class="graph" style="width: 80%">
+			<canvas id="barHorizontal"></canvas>
+		</div>
+		
 
-		<canvas id="pie"></canvas>
-	</div>
-	
-	<div class="col-5">
-	
+		<div style="width: 500px; height: 300px"> 
+			<canvas id="pie"></canvas> 
+		</div>
+		<div style="width: 60%"> 
+			<canvas id="barVertical"></canvas> 
+		</div>
 
-	</div>
-	
-	
-	<div style="margin:50px 0px" class="col-10">
-
-		<canvas id="densityChart"></canvas>
-	</div>
-	
-	
-
-	
+</div>
 
 	
 
@@ -82,6 +87,7 @@
 function renderPie() {
 	
 	let canvasPie = document.getElementById('pie').getContext('2d');
+	
 	let studentsCount="<%=studentsCount%>"; 
 	let studentswithoutRecord="<%=studentswithoutRecord%>";
 	let data = {
@@ -121,7 +127,7 @@ function renderPie() {
 function renderBar() {
 
    
-	let densityCanvas = document.getElementById("densityChart");
+	let densityCanvas = document.getElementById("barHorizontal");
 
 	Chart.defaults.global.defaultFontFamily = "Lato";
 	Chart.defaults.global.defaultFontSize = 18;
@@ -143,13 +149,64 @@ function renderBar() {
 	
 }
 
-	
-	console.log("sum",sum);
-	console.log("labels",labels);
+function getValues(time) {
+	console.log('time',time);
+	console.log('xd',typeof(time));
+	let splited = time.split(":");
+	let hours = parseInt(splited[0]) * 3600;
+	let minutes = parseInt(splited[1]) * 60;
+	let seconds = parseInt(splited[2]);
+	console.log('time',time,'hours+minutes+seconds',hours+minutes+seconds);
+	return hours+minutes+seconds;
+}
+
+
+function renderBarVertical() {
+
+	let barVertical = document.getElementById("barVertical").getContext("2d");
+	let lowest = "<%=lowest%>";
+	let average = "<%=average%>";
+	let fastest = "<%=fastest%>";
+
+	let myChart = new Chart(barVertical, {
+	  type: 'line',
+	  data: {
+	    labels: ["Más lenta", "Promedio", "Más rápida"],
+	    datasets: [{
+	      label: 'Tiempos de duración de encuesta (segundos)',
+	      data: [{
+	        
+	          y: getValues(lowest)
+	        },
+	        {
+	        
+	          y: getValues(average)
+	        },
+	        {
+	      
+	          y: getValues(fastest)
+	        }
+	      ],
+	      backgroundColor: [
+
+	        'rgba(54, 162, 235, 0.2)',
+	      ],
+	      borderColor: [
+
+	        'rgba(54, 162, 235, 1)',
+	      ],
+	      borderWidth: 1
+	    }]
+	  }
+	});
+
+}
+
 	
 renderPie();
 
 renderBar();
+renderBarVertical();
 	
 </script>
 </body>
