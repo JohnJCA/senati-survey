@@ -128,20 +128,14 @@ var endAtInputValue;
 		let strdays = setZero(days);
 		let strmin = setZero(min);
 		let strsec = setZero(sec);
-		
-		console.log("d",strdays); // "7d"
-		console.log("m",strmin ); // "7m"
-		console.log("sec",strsec); // "1s"
-		
-		
+	
 		totaltime = strdays+":"+strmin+":"+strsec;
 		
 		
 		let inputTotaltime = document.getElementById('totaltime');
 		inputTotaltime.value  = totaltime;
 		
-		console.log("totaltime",totaltime); // "1s"
-		
+		alert("Encuesta enviada!");
 	}
 	
 	setStartDate();

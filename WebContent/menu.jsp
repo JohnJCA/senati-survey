@@ -81,8 +81,8 @@ if (user.getFirstName() == null) {
 					  </div>
 				  </div>
 		     </c:forEach>
-	    	<div id="img-container" style="display:none; justify-content:center; width: 100%; margin-top:40px; flex-direction: column;align-items: center; ">
-    			<div style="width: 50%;box-shadow: 5px 5px 19px -8px rgba(0,0,0,0.75);">
+	    	<div id="img-container" style="display:none; justify-content:center; width: 100%; margin-top:40px; flex-direction: column;align-items: center;">
+    			<div style="width: 50%;box-shadow: 5px 5px 19px -8px rgba(0,0,0,0.75);overflow: hidden; border-radius: 50px; ">
 		    		<img alt="not_found" src="src/img/not_found.png" style="width: 100%;">
 	    			<a href="survey.jsp"  style="width: 100%;" type="button" style="width: 100%;" class="btn btn-lg btn-success">Agregar</a>
     			</div>

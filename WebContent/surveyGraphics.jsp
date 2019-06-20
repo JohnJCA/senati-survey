@@ -20,31 +20,37 @@
 
 <% 
 	DData data =new DData();
-String id = (String) request.getAttribute("id");
-int idAsInt = Integer.parseInt(id);
+	String id = (String) request.getAttribute("id");
+	int idAsInt = Integer.parseInt(id);
 	int recordsCount = data.getRecordsCount(idAsInt);
-	int studentsCount = data.getStudentsCount();
-	System.out.println("studentsCount"+ Integer.toString(studentsCount));
-	int studentswithoutRecord = studentsCount - recordsCount;
-
 	String surveyName = (String) request.getAttribute("surveyName");
 	
-
 	List<Diagram>  listdiagrambar =  data.getDiagramBar(idAsInt);
-	
-	String average =  data.getTAverage(idAsInt);
-	String fastest =  data.getTFastesUser(idAsInt);
-	String lowest =  data.getTLowestUser(idAsInt);
-	
+
 %>
 
 
 <div  style="margin-top:80px; display: flex; flex-flow: row wrap; justify-content: center;">
 
+
+<% if( listdiagrambar.size() > 0) {  %>
+
+
+	<% 
+		int studentsCount = data.getStudentsCount();
+		System.out.println("recordsCount"+ recordsCount);
+		System.out.println("studentsCount"+ studentsCount);
+		int studentswithoutRecord = studentsCount - recordsCount;
+		String average =  data.getTAverage(idAsInt);
+		String fastest =  data.getTFastesUser(idAsInt);
+		String lowest =  data.getTLowestUser(idAsInt);
+		
+	%>
 	<script>
 		var sum = [];
 		var labels = [];
 	</script>
+
 
       <c:forEach var="row" items="<%=listdiagrambar%>" >
       	<script>
@@ -53,7 +59,7 @@ int idAsInt = Integer.parseInt(id);
 		</script>
       		 
       </c:forEach>
-      
+
       
 
 	<h3 class="text-primary" style="text-align:center;width: 100%">${surveyName} - Analítica </h3><br><br><br><br>
@@ -70,7 +76,147 @@ int idAsInt = Integer.parseInt(id);
 		<div style="width: 60%"> 
 			<canvas id="barVertical"></canvas> 
 		</div>
+		
+		<script src="https://cdn.jsdelivr.net/npm/chart.js@2.8.0/dist/Chart.min.js"></script>
+		
+		<script>
+	
+	
+	function renderPie() {
+		
+		let canvasPie = document.getElementById('pie').getContext('2d');
+		
+		let studentsCount="<%=recordsCount%>"; 
+		let studentswithoutRecord="<%=studentswithoutRecord%>";
+		let data = {
+		    datasets: [{
+		        data: [studentsCount, studentswithoutRecord],
+	            backgroundColor: [
+	                'rgba(255, 99, 132, 0.9)',
+	                'rgba(54, 162, 235, 0.9)'
+	
+	            ],
+		    }],
+	
+		    labels: [
+		        'Alumnos que realizaron la encuesta',
+		        'Alumnos que aún no realizan la encuesta',
+		    ]
+		};
+		
+	
+		
+		let myPieChart = new Chart(canvasPie, {
+		    type: 'pie',
+		    data: data,
+		    options: {
+		        title: {
+		            display: true,
+		            text: 'Total de encuestas realizadas'
+		        }
+		    }
+		
+		});
+		
+	}
+	
+	
+	
+	function renderBar() {
+	
+	   
+		let densityCanvas = document.getElementById("barHorizontal");
+	
+		Chart.defaults.global.defaultFontFamily = "Lato";
+		Chart.defaults.global.defaultFontSize = 18;
+	
+		let densityData = {
+		  label: 'Preguntas con mas puntos (votos)',
+		  data: sum,
+		  backgroundColor: ["#3e95cd", "#8e5ea2","#3cba9f","#e8c3b9","#c45850"],
+		};
+	
+		let barChart = new Chart(densityCanvas, {
+		  type: 'horizontalBar',
+		  data: {
+		    labels: labels,
+		    datasets: [densityData]
+		  }
+		});
+		
+		
+	}
+	
+	function getValues(time) {
+		console.log('time',time);
+		console.log('xd',typeof(time));
+		let splited = time.split(":");
+		let hours = parseInt(splited[0]) * 3600;
+		let minutes = parseInt(splited[1]) * 60;
+		let seconds = parseInt(splited[2]);
+		console.log('time',time,'hours+minutes+seconds',hours+minutes+seconds);
+		return hours+minutes+seconds;
+	}
+	
+	
+	function renderBarVertical() {
+	
+		let barVertical = document.getElementById("barVertical").getContext("2d");
+		let lowest = "<%=lowest%>";
+		let average = "<%=average%>";
+		let fastest = "<%=fastest%>";
+	
+		let myChart = new Chart(barVertical, {
+		  type: 'line',
+		  data: {
+		    labels: ["Más lenta", "Promedio", "Más rápida"],
+		    datasets: [{
+		      label: 'Tiempos de duración de encuesta (segundos)',
+		      data: [{
+		        
+		          y: getValues(lowest)
+		        },
+		        {
+		        
+		          y: getValues(average)
+		        },
+		        {
+		      
+		          y: getValues(fastest)
+		        }
+		      ],
+		      backgroundColor: [
+	
+		        'rgba(54, 162, 235, 0.2)',
+		      ],
+		      borderColor: [
+	
+		        'rgba(54, 162, 235, 1)',
+		      ],
+		      borderWidth: 1
+		    }]
+		  }
+		});
+	
+	}
 
+	
+	renderPie();
+	
+	renderBar();
+	renderBarVertical();
+	
+</script>
+      <% } else { %>
+	    <div id="img-container" style="display:flex; justify-content:center; width: 80%; margin-top:40px; flex-direction: column;align-items: center; ">
+   			<div style="width: 50%;box-shadow: 5px 5px 19px -8px rgba(0,0,0,0.75);">
+	    		<img alt="not_found" src="src/img/no_content.png" style="width: 100%;">
+   			</div>
+    	</div>
+      <% } %>
+      
+      
+      
 </div>
 
 	
@@ -80,134 +226,6 @@ int idAsInt = Integer.parseInt(id);
 	
 </div>
  
-<script src="https://cdn.jsdelivr.net/npm/chart.js@2.8.0/dist/Chart.min.js"></script>
-<script>
 
-
-function renderPie() {
-	
-	let canvasPie = document.getElementById('pie').getContext('2d');
-	
-	let studentsCount="<%=studentsCount%>"; 
-	let studentswithoutRecord="<%=studentswithoutRecord%>";
-	let data = {
-	    datasets: [{
-	        data: [studentsCount, studentswithoutRecord],
-            backgroundColor: [
-                'rgba(255, 99, 132, 0.9)',
-                'rgba(54, 162, 235, 0.9)'
-
-            ],
-	    }],
-
-	    labels: [
-	        'Alumnos que realizaron la encuesta',
-	        'Alumnos que aún no realizan la encuesta',
-	    ]
-	};
-	
-
-	
-	let myPieChart = new Chart(canvasPie, {
-	    type: 'pie',
-	    data: data,
-	    options: {
-	        title: {
-	            display: true,
-	            text: 'Total de encuestas realizadas'
-	        }
-	    }
-	
-	});
-	
-}
-
-
-
-function renderBar() {
-
-   
-	let densityCanvas = document.getElementById("barHorizontal");
-
-	Chart.defaults.global.defaultFontFamily = "Lato";
-	Chart.defaults.global.defaultFontSize = 18;
-
-	let densityData = {
-	  label: 'Preguntas mejor rankeadas (votos)',
-	  data: sum,
-	  backgroundColor: ["#3e95cd", "#8e5ea2","#3cba9f","#e8c3b9","#c45850"],
-	};
-
-	let barChart = new Chart(densityCanvas, {
-	  type: 'horizontalBar',
-	  data: {
-	    labels: labels,
-	    datasets: [densityData]
-	  }
-	});
-	
-	
-}
-
-function getValues(time) {
-	console.log('time',time);
-	console.log('xd',typeof(time));
-	let splited = time.split(":");
-	let hours = parseInt(splited[0]) * 3600;
-	let minutes = parseInt(splited[1]) * 60;
-	let seconds = parseInt(splited[2]);
-	console.log('time',time,'hours+minutes+seconds',hours+minutes+seconds);
-	return hours+minutes+seconds;
-}
-
-
-function renderBarVertical() {
-
-	let barVertical = document.getElementById("barVertical").getContext("2d");
-	let lowest = "<%=lowest%>";
-	let average = "<%=average%>";
-	let fastest = "<%=fastest%>";
-
-	let myChart = new Chart(barVertical, {
-	  type: 'line',
-	  data: {
-	    labels: ["Más lenta", "Promedio", "Más rápida"],
-	    datasets: [{
-	      label: 'Tiempos de duración de encuesta (segundos)',
-	      data: [{
-	        
-	          y: getValues(lowest)
-	        },
-	        {
-	        
-	          y: getValues(average)
-	        },
-	        {
-	      
-	          y: getValues(fastest)
-	        }
-	      ],
-	      backgroundColor: [
-
-	        'rgba(54, 162, 235, 0.2)',
-	      ],
-	      borderColor: [
-
-	        'rgba(54, 162, 235, 1)',
-	      ],
-	      borderWidth: 1
-	    }]
-	  }
-	});
-
-}
-
-	
-renderPie();
-
-renderBar();
-renderBarVertical();
-	
-</script>
 </body>
 </html>
